@@ -1,0 +1,92 @@
+# Load the properties from classpath so they are not
+# compiled to a *.class file by Grails:
+#
+# --WARNING--
+# Due to bug https://svn.cargo.codehaus.org/browse/GRAILS-4761 this
+# doesn't work after a "grails clean", so start "grails run-app" twice
+# after a clean:
+environments:
+    development:
+        grails.config.locations:
+          - classpath:datasource-dev.properties
+          - classpath:openthesaurus-dev.properties
+        dataSource:
+            dbCreate: create-drop # One of 'create', 'create-drop', 'update', 'validate', ''
+            url: jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000
+    test:
+        grails.config.locations:
+          - classpath:datasource-test.properties
+          - classpath:openthesaurus-dev.properties
+        dataSource:
+            dbCreate: update
+            url: jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000
+    production:
+        grails.config.locations:
+          - classpath:datasource.properties
+          - classpath:openthesaurus.properties
+        dataSource:
+            dbCreate: update
+            url: jdbc:h2:prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000
+            pooled: true
+            properties:
+               maxActive: -1
+               minEvictableIdleTimeMillis: 1800000
+               timeBetweenEvictionRunsMillis: 1800000
+               numTestsPerEvictionRun: 3
+               testOnBorrow: true
+               testWhileIdle: true
+               testOnReturn: true
+               validationQuery: SELECT 1
+grails:
+    json:
+        legacy:
+            builder: false
+    mail:
+# For the production system mail settings, see /etc/exim4/passwd.client
+# Keep following three lines commented out for sending test mails locally
+#        host: smtprelaypool.ispgateway.de
+#        username: fixme
+#        password: fixme
+
+#TODO if(System.properties["${appName}.config.location"]) {
+#TODO    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
+#TODO}
+
+# Enabled native2ascii conversion of i18n properties files
+grails:
+    enable:
+        native2ascii: true
+# The following properties have been added by the Upgrade process...
+    views:
+        default:
+            codec: none # none, html, base64
+        gsp:
+            encoding: UTF-8
+# Uncomment and edit the following lines to start using Grails encoding & escaping improvements
+# uncomment next block
+## GSP settings
+#grails:
+#    views:
+#        gsp:
+#            encoding: UTF-8
+#            htmlcodec: xml # Use xml escaping instead of HTML4 escaping
+#            codecs:
+#                expression: html # Escapes values inside null
+#                scriptlet: none # Escapes output from scriptlets in GSPs
+#                taglib: none # Escapes output from taglibs
+#                staticparts: none # Escapes output from static template parts
+#        # Escapes all not-encoded output at final stage of outputting
+#        filteringCodecForContentType:
+#            #text/html: html
+dataSource:
+    pooled: true
+    driverClassName: org.h2.Driver
+    username: sa
+    password: 
+hibernate:
+    cache:
+        use_second_level_cache: true
+        use_query_cache: false
+        region.factory_class: net.sf.ehcache.hibernate.EhCacheRegionFactory
+# openthesaurus settings: see openthesaurus.properties
+
